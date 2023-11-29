@@ -1,0 +1,22 @@
+# Menentukan versi docker compose menjadi versi 2
+version: "2"
+
+# Daftar Services
+services:
+  item-app: # Service pertama
+    image: ghcr.io/arasyi/item-app:v1 # Menggunakan image dari Github Packages
+    ports:
+      - "80:8080" # Map port 80 di host menjadi 8080 di container
+    depends_on:
+      - item-db # Bergantung pada item-db, jadi item-db harus dijalankan terlebih dahulu
+    restart: always # Selalu restart saat container berhenti
+
+  item-db: # Service kedua
+    image: mongo:3 # Menggunakan image mongo:3 dari Dockerhub
+    volumes:
+      - app-db:/data/db # Memakai volume app-db dan memetakan ke path /data/db
+    restart: always # Selalu restart saat container berhenti
+
+# Daftar volumes
+volumes:
+  app-db: # Deklarasi volume app-db
