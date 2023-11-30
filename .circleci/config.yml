@@ -1,0 +1,26 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine
+version: 2.1
+
+# Define a job to be invoked later in a workflow.
+jobs:
+  lint-dockerfile:
+    docker:
+      - image: hadolint/hadolint:latest-debian
+    steps:
+      - checkout
+      - run: hadolint Dockerfile
+
+  build-app-karsajobs-ui:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: sh build_push_image_karsajobs_ui.sh
+
+# Orchestrate jobs using workflows
+workflows:
+  lint-and-build-karsajobs-ui:
+    jobs:
+      - lint-dockerfile
+      - build-app-karsajobs-ui
